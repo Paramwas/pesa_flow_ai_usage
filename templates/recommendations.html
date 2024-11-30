@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income Distribution</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ff9966, #ff5e62);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        h1, h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        input {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        button {
+            background: #ff9966;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #ff5e62;
+        }
+
+        pre {
+            background: #f4f4f4;
+            color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Income Distribution Recommendations</h1>
+    <div class="card">
+        <form id="recommendationForm">
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" required>
+
+            <label for="total_income">Total Income:</label>
+            <input type="number" id="total_income" name="total_income" required>
+
+            <label for="region_type">Region Type (Urban/Rural):</label>
+            <input type="text" id="region_type" name="region_type" required>
+
+            <label for="dependants">Dependants:</label>
+            <input type="number" id="dependants" name="dependants" required>
+
+            <label for="dependant_fees">Dependant Fees:</label>
+            <input type="number" id="dependant_fees" name="dependant_fees" required>
+
+            <label for="rent">Rent:</label>
+            <input type="number" id="rent" name="rent" required>
+
+            <label for="food">Food:</label>
+            <input type="number" id="food" name="food" required>
+
+            <label for="transport">Transport:</label>
+            <input type="number" id="transport" name="transport" required>
+
+            <label for="personal_expenses">Personal Expenses:</label>
+            <input type="number" id="personal_expenses" name="personal_expenses" required>
+
+            <button type="button" onclick="submitForm()">Get Recommendations</button>
+        </form>
+    </div>
+
+    <h2>Recommendations</h2>
+    <div class="card">
+        <pre id="recommendations"></pre>
+    </div>
+
+    <script>
+        function submitForm() {
+            const form = document.getElementById('recommendationForm');
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            data.age = parseInt(data.age);
+            data.total_income = parseFloat(data.total_income);
+            data.dependants = parseInt(data.dependants);
+            data.dependant_fees = parseFloat(data.dependant_fees);
+            data.rent = parseFloat(data.rent);
+            data.food = parseFloat(data.food);
+            data.transport = parseFloat(data.transport);
+            data.personal_expenses = parseFloat(data.personal_expenses);
+
+            fetch('/recommend', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                const recommendations = document.getElementById('recommendations');
+                if (result.error) {
+                    recommendations.textContent = 'Error: ' + result.error;
+                } else {
+                    recommendations.textContent = JSON.stringify(result.distribution, null, 2);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+
+</html>

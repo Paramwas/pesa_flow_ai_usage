@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+</head>
+<body>
+    <h1>Your Profile</h1>
+    <h2>Personal Details</h2>
+    <p><strong>Full Name:</strong> {{ details[2] }}</p>
+    <p><strong>Age:</strong> {{ details[3] }}</p>
+    <p><strong>Occupation:</strong> {{ details[4] }}</p>
+    <p><strong>Total Income:</strong> {{ details[5] }}</p>
+    <p><strong>Region:</strong> {{ details[6] }}, {{ details[7] }}</p>
+    <p><strong>Interests:</strong> {{ details[8] }}</p>
+
+    <h2>Dependants</h2>
+    {% if dependants %}
+        <ul>
+            {% for dependant in dependants %}
+                <li>{{ dependant[2] }} (Age: {{ dependant[3] }}, Fees: {{ dependant[4] }})</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No dependants added.</p>
+    {% endif %}
+
+    <h2>Debts</h2>
+    {% if depts %}
+        <ul>
+            {% for dept in depts %}
+                <li>{{ dept[2] }} (Amount: {{ dept[3] }}, Due Date: {{ dept[4] }})</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No debts recorded.</p>
+    {% endif %}
+
+    <h2>Expenses</h2>
+    <p><strong>Rent:</strong> {{ expenses[2] }}</p>
+    <p><strong>Food:</strong> {{ expenses[3] }}</p>
+    <p><strong>Transport:</strong> {{ expenses[4] }}</p>
+    <p><strong>Personal Expenses:</strong> {{ expenses[5] }}</p>
+
+    <button onclick="location.href='{{ url_for('home') }}'">Back to Home</button>
+</body>
+</html>

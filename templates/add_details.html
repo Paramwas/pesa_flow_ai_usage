@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Details</title>
+	<style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background: #6a11cb;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #2575fc;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            color: #333;
+            width: 80%;
+            max-width: 400px;
+            animation: fadeInUp 0.3s ease-in-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal button {
+            margin-top: 20px;
+            background: #6a11cb;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal button:hover {
+            background: #2575fc;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Add Your Details</h1>
+    <form action="/add_details" method="post">
+        <label>Full Name:</label>
+        <input type="text" name="full_name" required><br>
+
+        <label>Age:</label>
+        <input type="number" name="age" required><br>
+
+        <label>Occupation:</label>
+        <input type="text" name="occupation" required><br>
+
+        <label>Total Income:</label>
+        <input type="number" name="total_income" required><br>
+
+        <label>Region:</label>
+        <select name="region_type" required>
+            <option value="Urban">Urban</option>
+            <option value="Rural">Rural</option>
+        </select><br>
+
+        <label>Region Name:</label>
+        <input type="text" name="region_name" required><br>
+
+        <h3>Dependants:</h3>
+        <div id="dependants">
+            <div>
+                <label>Name:</label>
+                <input type="text" name="dependant[]" required>
+                <label>Age:</label>
+                <input type="number" name="dependant_age[]" required>
+                <label>Fees:</label>
+                <input type="number" name="dependant_fee[]" required><br>
+            </div>
+        </div>
+        <button type="button" onclick="addDependant()">Add Dependant</button><br>
+
+        <h3>Dept:</h3>
+        <div id="dept">
+            <div>
+                <label>Description:</label>
+                <input type="text" name="dept_name[]" required>
+                <label>Amount:</label>
+                <input type="number" name="dept_amount[]" required>
+                <label>Due Date:</label>
+                <input type="date" name="dept_due_date[]" required><br>
+            </div>
+        </div>
+        <button type="button" onclick="addDept()">Add Dept</button><br>
+
+        <h3>Long-Term Goals:</h3>
+        <div id="long_term_goals">
+            <div>
+                <label>Goal:</label>
+                <input type="text" name="long_term_goal[]" required>
+                <label>Amount:</label>
+                <input type="number" name="long_term_goal_amount[]" required><br>
+            </div>
+        </div>
+        <button type="button" onclick="addLongTermGoal()">Add Long-Term Goal</button><br>
+
+        <h3>Short-Term Goals:</h3>
+        <div id="short_term_goals">
+            <div>
+                <label>Goal:</label>
+                <input type="text" name="short_term_goal[]" required>
+                <label>Amount:</label>
+                <input type="number" name="short_term_goal_amount[]" required><br>
+            </div>
+        </div>
+        <button type="button" onclick="addShortTermGoal()">Add Short-Term Goal</button><br>
+
+        <h3>Expenses:</h3>
+        <label>Rent:</label>
+        <input type="number" name="rent" required><br>
+
+        <label>Food:</label>
+        <input type="number" name="food" required><br>
+
+        <label>Transport:</label>
+        <input type="number" name="transport" required><br>
+
+        <label>Personal Expenses:</label>
+        <input type="number" name="personal_expenses" required><br>
+
+        <h3>Interests:</h3>
+        <textarea name="interests" placeholder="Enter your interests" required></textarea><br>
+
+        <button type="submit">Save Details</button>
+    </form>
+
+    <script>
+        function addDependant() {
+            const dependants = document.getElementById('dependants');
+            const newDependant = document.createElement('div');
+            newDependant.innerHTML = `
+                <label>Name:</label>
+                <input type="text" name="dependant[]" required>
+                <label>Age:</label>
+                <input type="number" name="dependant_age[]" required>
+                <label>Fees:</label>
+                <input type="number" name="dependant_fee[]" required><br>`;
+            dependants.appendChild(newDependant);
+        }
+
+        function addLongTermGoal() {
+            const goals = document.getElementById('long_term_goals');
+            const newGoal = document.createElement('div');
+            newGoal.innerHTML = `
+                <label>Goal:</label>
+                <input type="text" name="long_term_goal[]" required>
+                <label>Amount:</label>
+                <input type="number" name="long_term_goal_amount[]" required><br>`;
+            goals.appendChild(newGoal);
+        }
+
+        function addShortTermGoal() {
+            const goals = document.getElementById('short_term_goals');
+            const newGoal = document.createElement('div');
+            newGoal.innerHTML = `
+                <label>Goal:</label>
+                <input type="text" name="short_term_goal[]" required>
+                <label>Amount:</label>
+                <input type="number" name="short_term_goal_amount[]" required><br>`;
+            goals.appendChild(newGoal);
+        }
+
+        function addDept() {
+            const dept = document.getElementById('dept');
+            const newDept = document.createElement('div');
+            newDept.innerHTML = `
+                <label>Description:</label>
+                <input type="text" name="dept_name[]" required>
+                <label>Amount:</label>
+                <input type="number" name="dept_amount[]" required>
+                <label>Date:</label>
+                <input type="date" name="dept_due_date[]" required><br>`;
+            dept.appendChild(newDept);
+        }
+    </script>
+</body>
+</html>

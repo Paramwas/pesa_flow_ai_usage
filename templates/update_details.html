@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Details</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background: #6a11cb;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #2575fc;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            color: #333;
+            width: 80%;
+            max-width: 400px;
+            animation: fadeInUp 0.3s ease-in-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal button {
+            margin-top: 20px;
+            background: #6a11cb;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal button:hover {
+            background: #2575fc;
+        }
+    </style>
+</head>
+<body>
+    <form method="POST" onsubmit="showModal(event)">
+        <h1>Update Your Details</h1>
+        <label>Occupation:</label>
+        <input type="text" name="occupation" value="{{ details[3] }}" required>
+
+        <label>Total Income:</label>
+        <input type="number" name="total_income" value="{{ details[4] }}" required>
+
+        <label>Rent:</label>
+        <input type="number" name="rent" value="{{ details[8] }}" required>
+
+        <label>Food:</label>
+        <input type="number" name="food" value="{{ details[9] }}" required>
+
+        <label>Transport:</label>
+        <input type="number" name="transport" value="{{ details[10] }}" required>
+
+        <label>Personal Expenses:</label>
+        <input type="number" name="personal_expenses" value="{{ details[11] }}" required>
+
+        <button type="submit">Update Details</button>
+    </form>
+
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <h2>Details Updated Successfully!</h2>
+            <p>Your details have been updated. Thank you!</p>
+            <button onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        function showModal(event) {
+            event.preventDefault(); // Prevent form submission
+            document.getElementById('confirmationModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('confirmationModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

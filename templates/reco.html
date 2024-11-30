@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income Distribution</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background: #6a11cb;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #2575fc;
+        }
+
+        .output-container {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            color: #333;
+        }
+
+        .output-container h2 {
+            text-align: center;
+            color: #6a11cb;
+            margin-bottom: 10px;
+        }
+
+        .output-container pre {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            color: #333;
+            overflow-x: auto;
+        }
+
+        .output-container .details {
+            margin-bottom: 15px;
+        }
+
+        .output-container .details p {
+            margin: 5px 0;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Income Distribution Recommendations</h1>
+    <form id="recommendationForm">
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" required>
+
+        <label for="total_income">Total Income:</label>
+        <input type="number" id="total_income" name="total_income" required>
+
+        <label for="region_type">Region Type (Urban/Rural):</label>
+        <input type="text" id="region_type" name="region_type" required>
+
+        <label for="dependants">Dependants:</label>
+        <input type="number" id="dependants" name="dependants" required>
+
+        <label for="dependant_fees">Dependant Fees:</label>
+        <input type="number" id="dependant_fees" name="dependant_fees" required>
+
+        <label for="rent">Rent:</label>
+        <input type="number" id="rent" name="rent" required>
+
+        <label for="food">Food:</label>
+        <input type="number" id="food" name="food" required>
+
+        <label for="transport">Transport:</label>
+        <input type="number" id="transport" name="transport" required>
+
+        <label for="personal_expenses">Personal Expenses:</label>
+        <input type="number" id="personal_expenses" name="personal_expenses" required>
+
+        <button type="button" onclick="submitForm()">Get Recommendations</button>
+    </form>
+
+    <div id="output" class="output-container" style="display: none;">
+        <h2>Recommendation Results</h2>
+        <div class="details">
+            <h3>Input Details</h3>
+            <p id="inputDetails"></p>
+        </div>
+        <h3>Recommendations</h3>
+        <pre id="recommendations"></pre>
+    </div>
+
+    <script>
+        function submitForm() {
+            const form = document.getElementById('recommendationForm');
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            data.age = parseInt(data.age);
+            data.total_income = parseFloat(data.total_income);
+            data.dependants = parseInt(data.dependants);
+            data.dependant_fees = parseFloat(data.dependant_fees);
+            data.rent = parseFloat(data.rent);
+            data.food = parseFloat(data.food);
+            data.transport = parseFloat(data.transport);
+            data.personal_expenses = parseFloat(data.personal_expenses);
+
+            fetch('/recommend', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                const output = document.getElementById('output');
+                const recommendations = document.getElementById('recommendations');
+                const inputDetails = document.getElementById('inputDetails');
+
+                if (result.error) {
+                    recommendations.textContent = 'Error: ' + result.error;
+                } else {
+                    recommendations.textContent = JSON.stringify(result.distribution, null, 2);
+                }
+
+                inputDetails.innerHTML = `
+                    <p><strong>Age:</strong> ${data.age}</p>
+                    <p><strong>Total Income:</strong> ${data.total_income}</p>
+                    <p><strong>Region Type:</strong> ${data.region_type}</p>
+                    <p><strong>Dependants:</strong> ${data.dependants}</p>
+                    <p><strong>Dependant Fees:</strong> ${data.dependant_fees}</p>
+                    <p><strong>Rent:</strong> ${data.rent}</p>
+                    <p><strong>Food:</strong> ${data.food}</p>
+                    <p><strong>Transport:</strong> ${data.transport}</p>
+                    <p><strong>Personal Expenses:</strong> ${data.personal_expenses}</p>
+                `;
+
+                output.style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>

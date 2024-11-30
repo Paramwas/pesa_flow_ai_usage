@@ -26,38 +26,38 @@ To run this application, you'll need the following:
    ```bash
    git clone <repository_url>
    cd <repository_folder>
-Install dependencies:
+ ## Install dependencies:
 
 pip install -r requirements.txt
-Set up MySQL:
+## Set up MySQL:
 
-Install MySQL and create the budgeting_app database.
-Set up the necessary tables (users, details, dependants, dept, expenses) in the MySQL database.
-Update the MySQL settings in app.py:
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'your_password'
-app.config['MYSQL_DB'] = 'budgeting_app'
-Prepare the income distribution model:
+-Install MySQL and create the budgeting_app database.
+-Set up the necessary tables (users, details, dependants, dept, expenses) in the MySQL database.
+-Update the MySQL settings in app.py:
+-app.config['MYSQL_HOST'] = 'localhost'
+-app.config['MYSQL_USER'] = 'root'
+-app.config['MYSQL_PASSWORD'] = 'your_password'
+-app.config['MYSQL_DB'] = 'budgeting_app'
+-Prepare the income distribution model:
 
-Ensure the model file income_distribution_model.pkl is available in the root folder.
+## Ensure the model file income_distribution_model.pkl is available in the root folder.
 Running the App:
 To run the application, execute the following command:
 
 python app.py
 Visit http://localhost:5000 in your browser to use the app.
 
-Model Training
+## Model Training
 Training Data:
 The model is trained on historical data containing features like age, income, and financial details such as expenses and debts.
 
-Train the Model:
+## Train the Model:
 To train the model, run the following script:
 
 python training.py
 The trained model will be saved as income_distribution_model.pkl.
 
-Application Routes
+## Application Routes
 /register: User registration page.
 /login: User login page.
 /home: Home page after successful login.
@@ -69,7 +69,7 @@ Application Routes
 Model Overview
 The IncomeDistributionModel uses machine learning (LinearRegression, StandardScaler) to predict income distribution based on user data. The features include age, total income, dependants, and other financial factors.
 
-Model Methods:
+## Model Methods:
 train_model(training_data): Trains the model on a given dataset.
 recommend_distribution(user_data): Provides income distribution recommendations based on input data.
 prioritize_loans(loans): Suggests loan repayment priorities based on due dates.
@@ -79,10 +79,8 @@ License
 This project is licensed under the MIT License. See the LICENSE file for details.
 
 
-### Key Features:
-- **Headings**: Organized for easy navigation.
-- **Bold Text**: Used for important terms and key concepts.
-- **Code Blocks**: For commands, file paths, and configuration snippets to ensure clarity.
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.
 
 
 
